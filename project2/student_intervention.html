@@ -11800,7 +11800,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># 载入所需要的库</span>
@@ -11852,7 +11852,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO： 计算学生的数量</span>
@@ -11860,7 +11860,7 @@ div#notebook {
 <span class="c1">#print student_data.size</span>
 
 <span class="c1"># TODO： 计算特征数量</span>
-<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
 
 <span class="c1"># TODO： 计算通过的学生数</span>
 <span class="n">n_passed</span> <span class="o">=</span> <span class="n">student_data</span><span class="p">[</span> <span class="n">student_data</span><span class="o">.</span><span class="n">passed</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -11890,7 +11890,7 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Total number of students: 395
-Number of features: 31
+Number of features: 30
 Number of students who passed: 265
 Number of students who failed: 130
 Graduation rate of the class: 67.09%
@@ -12540,7 +12540,9 @@ F1 score for test set: 0.7647.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>回答: </strong>我们的模型是要寻找一个参数未定的函数，把每个学生的属性输入进去该函数会输出一个结果“通过”或者“不通过”。假如我们有一条已知的数据，那么能正确输出结果的函数就会有许多，但是如果我们不断让这个函数同时满足越来越多的学生信息，它的参数范围就会不断被限制，训练的过程就是不断小步调整这些参数的过程。当模型参数都稳定了之后，再把一个学生的属性输入进去这个函数自然就会给出预测结果了，因为这个预测对于它来说只是做一个数学计算。</p>
+<p><strong>回答: </strong></p>
+<p>如果我们要预测一个学生是否毕业，简单的办法有很多比如我们看这个学生在校期间是否有过考试不及格情况。如果没有就判断他毕业，反之则需要进行干预。再比如我们可以考察他的努力程度，如果每周学习10小时以上则会毕业等等。但是我们也都知到这些判断依据单独看起来虽然有一定的参考性但是并不会非常准确，你肯定不会认为一个挂过一科的学生就会不能毕业了，同样也不是每一个花时间学习的人都能确保学的好。所以如果要更准确的预测我们就要尽可能多的收集会和学生毕业与否有关系的学生的信息，因为如果一个学生从来不挂科，又每天花大量的时间学习，父母又非常重视教育、热爱参加社会活动，那么从感觉上来说他几乎是不可能毕不了业的。</p>
+<p>任何预测都是需要基于已有经验的，当我们有足够的准确数据后我们就可以通过统计分析来发现其中的规律，也就是符合什么样条件的学生容易毕业什么样的难以毕业。这样对于一个将要毕业的新学生，当我们把他的各方面信息输入这个模型之后就可以根据以往的经验自动将其归类到“毕业”或者“有风险”中的一类去了。模型训练的过程就好像我们学骑车，一开始很容易摔跤但是我们会不断地调整我们的动作和姿势，上次太靠右了摔倒了我们就直到下次稍微往左边调一点。通过若干次不断的学习最终就会掌握骑车这个技术。然后当有新的自行车即使有些地方不太一样我们也可以根据自己以前的建立起来的经验直到应该怎么骑了。</p>
 
 </div>
 </div>
