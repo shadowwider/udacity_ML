@@ -64,7 +64,7 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set 'state' as a tuple of relevant data for the agent        
-        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['right'])
+        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['right'], inputs['left'])
         if not state in self.Q:
             self.Q[state]={key: 0 for key in self.valid_actions}
 
