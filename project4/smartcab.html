@@ -13649,7 +13649,7 @@ mJIkSZIkSdJQmJiSJEmSJEnSUJiYkiRJkiRJ0lCYmJIkSZIkSdJQmJiSJEmSJEnSUJiYkiRJkiRJ
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>回答：</strong>我会用除了deadline和left以外的所有特征。因为考虑到安全性，交通灯和交叉方向的因素是一定要考虑的；而关于效率那么车子的目的地和同侧方向也就是right方向的车辆目的地也是需要考虑的因素。而left方向的车辆因为不会越过横向所以对整个代理的决策没有影响，这也是符合我们交通规则的。另外剩余动作数目这个因素也于主要选择关系不大。</p>
+<p><strong>回答：</strong>我会用除了deadline以外的所有特征。因为考虑到安全性，交通灯和交叉方向的因素是一定要考虑的，之前没有考虑到left方向的车辆，但是实际上安全性里有关于左转的时候对面方向需要没有车的要求，所以这里也加入了。而关于效率那么车子的目的地和同侧方向也就是right方向的车辆目的地也是需要考虑的因素。另外deadline个因素不去选择主要有三个原因，第一，这个量每一次的测试会有变化，所以不确定。第二，如果考虑的话那么每走一步都是一个状态，这个状态的量需要乘以前面所有状态的乘积，会造成Q表过大。第三，本身这个值和智能关系有限，不影响安全性而且使用的步数越少奖励越好，题目也并没有这个要求，只要求按时到达。</p>
 
 </div>
 </div>
@@ -13682,12 +13682,13 @@ mJIkSZIkSdJQmJiSJEmSJEnSUJiYkiRJkiRJ0lCYmJIkSZIkSdJQmJiSJEmSJEnSUJiYkiRJkiRJ
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>回答：</strong>我的状态空间为96，我觉得代理驾驶经过一定的学习后是可以学习到好策略的，计算方式如下：
+<p><strong>回答：</strong>我的状态空间为384，我觉得代理驾驶经过一定的学习后是可以学习到好策略的，计算方式如下：
 waypoint 有3中状态 右侧 、左侧、前面
 input中的light有两种状态 红、绿
 right有四种状态 不动、向右、向左、向前
+left有四种状态 不动、向右、向左、向前
 oncoming和上面一样
-所以所有状态的总和是 3<em>2</em>4*4</p>
+所以所有状态的总和是 3*2*4*4*4</p>
 
 </div>
 </div>
@@ -19638,19 +19639,25 @@ zMzMzMzMzMysI/4//PNvo9FjIX8AAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>回答：</strong> 按照交通规则最优策略举例就是1.如果waypoint是向前，state状态是红灯，那么执行动作就应该是停止；2.如果waypoint是向前，state状态是绿灯，那么执行动作就应该是前进。摘抄的记录</p>
-<p>('forward', 'red', None, None)
+<p><strong>回答：</strong> 智能出租车的最优策略就是在最短步数内到达目的地，而且中间不出现任何交通违规行为，并且还要对别人的违规行为做出正确的策略避免相撞，而不是按照死的交通规则行驶自己的路权。举例就是1.如果waypoint是向前，state状态是红灯，那么执行动作就应该是停止；2.如果waypoint是向前，state状态是绿灯，那么执行动作就应该是前进。摘抄的记录</p>
+<p>('forward', 'red', None, None, None)
  -- forward : -10.23
  -- right : 0.79
  -- None : 1.92
  -- left : -10.14
  这里就是state红灯，waypoint向前，策略的值可以看到只有None才可以得到正向的最多的反馈，所以策略正确。
- ('forward', 'green', None, None)
+ ('forward', 'green', None, None, None)
  -- forward : 1.87
  -- right : 0.63
  -- None : -4.57
  -- left : 0.71
- 这里就是state绿灯，waypoint向前，策略的值可以看到只有forward动作才可以得到正向的最多的反馈，所以策略正确。</p>
+ 这里就是state绿灯，waypoint向前，策略的值可以看到只有forward动作才可以得到正向的最多的反馈，所以策略正确。
+ ('left', 'green', None, None, 'forward')
+ -- forward : 0.47
+ -- right : 0.27
+ -- None : -5.24
+ -- left : -19.44
+ 这里就是state绿灯，waypoint向左，但是对面车道还有车在向前的情况。我认为这里的策略是可以再优化的。根据Q表分值可以看出它对于此时的策略因为考虑到了安全性属于严重隐患所以对于继续左转的行为给出了很高的负分，而停止属于轻微隐患所以给出的负分比较低，最优策略选择是向前。我觉得或许可以先停止再等对面车离开再左转也许更高效。</p>
 
 </div>
 </div>
@@ -19681,7 +19688,8 @@ zMzMzMzMzMysI/4//PNvo9FjIX8AAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>回答：</strong></p>
+<p><strong>回答：</strong>一个是因为目前的算法里每一次训练白车的起点和终点都是随机的。如果我们有未来奖励那么终点的奖励理论上最终会扩散到中间的每一步知道起点，但是这里就和之前讨论的deadline不使用一样，状态太多了，所以扩散的方向很不明确，算法没有一个稳定的收敛方向，可能会波动很大最终导致没有理想效果。</p>
+<p>另一个原因是我们这里的状态白车只知道它和终点的方位差并不知道具体格数，没有定义准确的距离这个值体现在了代码中。所以我们也很难在训练中定义清楚某两次都为抵达终点的策略哪个更好。</p>
 
 </div>
 </div>
